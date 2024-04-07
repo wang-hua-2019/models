@@ -33,7 +33,7 @@ def get_args_train(parents=None):
     parser.add_argument("--ms_loss_scaler_value", type=float, default=256.0, help="static loss scale value")
     parser.add_argument("--device_target", type=str, default="Ascend", help="device target, Ascend/GPU/CPU")
     parser.add_argument("--resume_ckpt", type=str, default="", help="pre trained weights path")
-    parser.add_argument("--batch_size", type=int, default=2, help="total batch size for all device")
+    parser.add_argument("--batch_size", type=int, default=4, help="total batch size for all device")
     parser.add_argument("--amp_level", type=str, default="O3", help="Supports ['O0', 'O1', 'O2', 'O3']. Default: 'O3'")
     parser.add_argument("--run_eval", type=ast.literal_eval, default=True, help="run eval")
     parser.add_argument("--clip_grad", type=ast.literal_eval, default=False, help="clip grad")

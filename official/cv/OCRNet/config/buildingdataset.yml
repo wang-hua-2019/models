@@ -1,0 +1,15 @@
+data:
+  dataset_dir: "/data/building_dataset"
+  name: "building_dataset"
+  num_parallel_workers: 8
+  train_transforms:
+    item_transforms:
+      - ResizeStepScaling: {min_scale_factor: 0.5, max_scale_factor: 2.0, scale_step_size: 0.25}
+      - RandomPaddingCrop: {crop_size: [512, 512]}
+      - RandomHorizontalFlip: {prob: 0.5}
+      - RandomDistort: {brightness_range: 0.4, contrast_range: 0.4, saturation_range: 0.4}
+      - Normalize_seg: {mean: [0.5, 0.5, 0.5], std: [0.5, 0.5, 0.5]}
+
+  eval_transforms:
+    item_transforms:
+      - Normalize_seg: {mean: [0.5, 0.5, 0.5], std: [0.5, 0.5, 0.5]}

@@ -1,5 +1,5 @@
 net: OCRNet
-num_classes: 19
+num_classes: 3
 backbone:
     initializer: hrnet_seg_w48
     pretrained: True
