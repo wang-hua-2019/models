@@ -111,7 +111,8 @@ def create_dataset(cfg, batch_size, num_parallel_workers=8, group_size=1, rank=0
             is_train=is_train,
         )
     elif cfg.name == "building_dataset":
-        dataset = BulidingDataset(dataset_root=cfg.dataset_dir, mode=task)
+        dataset = ds.GeneratorDataset(source=BulidingDataset(dataset_root=cfg.dataset_dir, mode=task),
+                                      column_names=["image", "label"])
     else:
         raise NotImplementedError
 

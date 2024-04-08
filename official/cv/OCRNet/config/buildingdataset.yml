@@ -2,6 +2,8 @@ data:
   dataset_dir: "/data/building_dataset"
   name: "building_dataset"
   num_parallel_workers: 8
+  ignore_label: 255
+  map_label: None
   train_transforms:
     item_transforms:
       - ResizeStepScaling: {min_scale_factor: 0.5, max_scale_factor: 2.0, scale_step_size: 0.25}
