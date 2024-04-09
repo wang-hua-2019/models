@@ -1,6 +1,8 @@
 import os
 import cv2
 import multiprocessing
+from PIL import Image
+import numpy as np
 from mindspore import dataset as ds
 from .cityscapes import Cityscapes
 from .transforms_factory import create_transform
@@ -63,7 +65,10 @@ class BulidingDataset:
 
     def __getitem__(self, idx):
         image_path, label_path = self.file_list[idx]
-        return image_path, label_path
+        image = cv2.imread(image_path).astype('float32')
+        label = np.asarray(Image.open(label_path))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image, label
 
     def __len__(self):
         return len(self.file_list)

@@ -162,8 +162,7 @@ if __name__ == "__main__":
         )
 
     loss_fn = CrossEntropy(
-        num_classes=config.num_classes, ignore_label=config.data.ignore_label, cls_weight=config.data.map_label
-    ).to_float(ms.float32)
+        num_classes=config.num_classes, ignore_label=config.data.ignore_label).to_float(ms.float32)
     net_with_loss = WithLossCell(network, loss_fn, config.loss_weight)
 
     # Optimizer
