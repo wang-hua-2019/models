@@ -176,25 +176,30 @@ class MultiScaleInfer(nn.Cell):
         self.multi_out = multi_out
 
     def construct(self, img):
-        n, c, h, w = img.shape
-        pred_res = ops.zeros((n, h, w, self.num_classes), ms.float32)
-        for r in self.img_ratios:
-            n_h, n_w = int(h * r), int(w * r)
-            n_img = ops.interpolate(img, size=(n_h, n_w), mode="bilinear")
-            pred = self.net(n_img)
-            if self.multi_out:
-                pred = pred[0]
-            pred = ops.interpolate(pred, size=(h, w), mode="bilinear")
-            pred = ops.softmax(pred.transpose(0, 2, 3, 1), -1)
-            pred_res += pred
-            if self.flip:
-                n_img = n_img[:, :, :, ::-1]
+        if len(self.img_ratios) > 1:
+            n, c, h, w = img.shape
+            pred_res = ops.zeros((n, h, w, self.num_classes), ms.float32)
+            for r in self.img_ratios:
+                n_h, n_w = int(h * r), int(w * r)
+                n_img = ops.interpolate(img, size=(n_h, n_w), mode="bilinear")
                 pred = self.net(n_img)
                 if self.multi_out:
                     pred = pred[0]
-                pred = pred[:, :, :, ::-1]
                 pred = ops.interpolate(pred, size=(h, w), mode="bilinear")
                 pred = ops.softmax(pred.transpose(0, 2, 3, 1), -1)
                 pred_res += pred
-        pred_res = ops.argmax(pred_res, -1)
+                if self.flip:
+                    n_img = n_img[:, :, :, ::-1]
+                    pred = self.net(n_img)
+                    if self.multi_out:
+                        pred = pred[0]
+                    pred = pred[:, :, :, ::-1]
+                    pred = ops.interpolate(pred, size=(h, w), mode="bilinear")
+                    pred = ops.softmax(pred.transpose(0, 2, 3, 1), -1)
+                    pred_res += pred
+            pred_res = ops.argmax(pred_res, -1)
+        else:
+            pred = self.net(img)
+            pred = ops.softmax(pred.transpose(0, 2, 3, 1), -1)
+            pred_res = ops.argmax(pred, -1)
         return pred_res

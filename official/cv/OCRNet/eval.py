@@ -68,7 +68,10 @@ def run_eval(cfg, net, eval_dataset):
     for i, data in enumerate(data_loader):
         img = data["image"]
         label = data["label"]
+        import time
+        start_time = time.time()
         pred = net(ms.Tensor(img)).asnumpy()
+        print('=====cost time', time.time()-start_time, flush=True)
         pred = np.squeeze(pred).astype(np.uint8)
         label = np.squeeze(label.astype(np.uint8))
         if cfg.visualize:
